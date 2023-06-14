@@ -210,6 +210,33 @@ public:
 				}
 			}
 		}
+		static void RowSim(std::vector<std::vector<double> >& matrix)
+		{
+			int R = Row(matrix), C = Column(matrix);
+			GausElmn(matrix);
+			for (int r = 1; r <= R; r++) {
+				int c = 1;
+				for (c = 1; c <= C; c++) {
+					if (fabs(matrix[r][c]) >= 1e-6) break;
+				}
+				RowTrans(matrix, r, matrix[r][c]);
+			}
+			for (int r = 1; r <= R; r++) {
+				int c = 1;
+				for (c = 1; c <= C; c++) {
+					if (fabs(matrix[r][c]) >= 1e-6) break;
+				}
+				for (int r2 = 2; r2 <= r - 1; r2++) {
+					RowTrans(matrix, r2, r, -matrix[r2][c]);
+				}
+			}
+		}
+		static void RowSim(std::vector<std::vector<double> > matrix1, std::vector<std::vector<double> >& matrix2)
+		{
+			matrix2 = matrix1;
+			GausElmn(matrix2);
+			RowSim(matrix2);
+		}
 		static double Det(std::vector<std::vector<double> > det)
 		{
 			int n = Rank(det);
@@ -407,7 +434,7 @@ public:
 		}
 		static bool Eigen()
 		{
-
+			return true;
 		}
 
 	protected:
@@ -416,7 +443,7 @@ public:
 			int n = det[1].size() - 1;
 			for (int i = 1; i <= n; i++) det[r][i] = k * det[r][i];
 		}
-		static void RowTrans(std::vector<std::vector<double> >& det, int r1, int r2, double k)
+		static void RowTrans(std::vector<std::vector<double> >& det, int r1, int r2, double k) //r1 = r1 + k * r2
 		{
 			int n = det[1].size() - 1;
 			for (int i = 1; i <= n; i++) det[r1][i] = det[r1][i] + k * det[r2][i];

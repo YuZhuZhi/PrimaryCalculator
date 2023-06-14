@@ -433,12 +433,12 @@ public:
 					std::cin >> C;
 					std::cout << "ÇëÊäÈë¾ØÕó£º" << std::endl;
 					Linear::Matrix::Input(matrix1, R, C);
-					Linear::Matrix::GausElmn(matrix1, matrix3);
+					Linear::Matrix::RowSim(matrix1, matrix3);
 					std::cout << "¾ØÕóµÄĞĞ×î¼òĞÎ¾ØÕóÎª£º" << std::endl;
 					Linear::Matrix::Print(matrix3);
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix::GausElmn(matrix1, matrix3);
+					Linear::Matrix::RowSim(matrix1, matrix3);
 					std::cout << "¾ØÕóµÄĞĞ×î¼òĞÎ¾ØÕóÎª£º" << std::endl;
 					Linear::Matrix::Print(matrix3);
 

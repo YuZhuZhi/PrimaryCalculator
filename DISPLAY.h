@@ -41,13 +41,14 @@ public:
 	static void ChooseFir()
 	{
 		system("color F0");
-		Sleep(sleeptime);
+		//Sleep(sleeptime);
 		if (YN == 'N' || YN == 'n') ChooseFirWithN();
 		if (YN == 'Y' || YN == 'y') ChooseFirWithY();
 		ChooseYN();
 	}
 	static void ChooseFirWithN()
 	{
+		Sleep(sleeptime);
 		std::cout << "--------------------------------------------------------" << std::endl;
 		std::cout << "选择你需要的操作：" << std::endl;
 		std::cout << "1\t常规数据处理(6)" << std::endl;
@@ -76,7 +77,7 @@ public:
 			break;
 		case 4:
 			system("cls");
-			ChooseFir();
+			ChooseFirWithN();
 			break;
 		default:
 			ChooseFir();
@@ -281,7 +282,7 @@ public:
 		std::cout << "3\t求二矩阵之差" << std::endl;
 		std::cout << "4\t求二矩阵之积" << std::endl;
 		std::cout << "5\t求矩阵的行阶梯形矩阵(高斯消元法)" << std::endl;
-		std::cout << "6\t求矩阵的行最简形矩阵(暂未搭载)" << std::endl;
+		std::cout << "6\t求矩阵的行最简形矩阵" << std::endl;
 		std::cout << "7\t求方阵的n次幂" << std::endl;
 		std::cout << "8\t求方阵的伴随阵" << std::endl;
 		std::cout << "9\t求方阵的逆阵" << std::endl;

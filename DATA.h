@@ -7,7 +7,6 @@
 #include <iomanip>
 #define Max(a, b) (a > b) ? a : b;
 #define Min(a, b) (a > b) ? b : a;
-#define OEPN(a) (a % 2 == 0) ? (1) : (-1);
 
 class Data
 {
