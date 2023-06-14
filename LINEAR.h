@@ -219,14 +219,14 @@ public:
 				for (c = 1; c <= C; c++) {
 					if (fabs(matrix[r][c]) >= 1e-6) break;
 				}
-				RowTrans(matrix, r, matrix[r][c]);
+				RowTrans(matrix, r, 1.0 / matrix[r][c]);
 			}
-			for (int r = 1; r <= R; r++) {
-				int c = 1;
+			for (int r = R; r >= 1; r--) {
+				int c = C;
 				for (c = 1; c <= C; c++) {
 					if (fabs(matrix[r][c]) >= 1e-6) break;
 				}
-				for (int r2 = 2; r2 <= r - 1; r2++) {
+				for (int r2 = r - 1; r2 >= 1; r2--) {
 					RowTrans(matrix, r2, r, -matrix[r2][c]);
 				}
 			}
