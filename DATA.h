@@ -162,7 +162,7 @@ public:
 		{
 			double x_sqaver = Process::SquareAver(x), y_sqaver = Process::SquareAver(y);
 			double x_aver = Process::Average(x), y_aver = Process::Average(y);
-			return ((Process::CroseAver(x, y) - x_aver * y_aver) / (sqrt((x_sqaver * x_sqaver - x_aver * x_aver) * (y_sqaver * y_sqaver - y_aver * y_aver))));
+			return ((Process::CroseAver(x, y) - x_aver * y_aver) / (sqrt((x_sqaver - x_aver * x_aver) * (y_sqaver - y_aver * y_aver))));
 		}
 	};
 

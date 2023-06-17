@@ -17,8 +17,9 @@ public:
 	static void Guide()
 	{
 		std::cout << "--------------------------------------------------------" << std::endl;
-		std::cout << "欢迎使用数理计算器ver0.55(TEST)。(Programmed by 御伫之)" << std::endl;
+		std::cout << "欢迎使用数学计算器ver0.56(TEST)。(Programmed by 御伫之)" << std::endl;
 		std::cout << "(御伫之 知乎主页：https://www.zhihu.com/people/yuzhuzhi)" << std::endl;
+		std::cout << "(本计算器开源于：https://github.com/YuZhuZhi/PrimaryCalculator)" << std::endl;
 		std::cout << "使用方法：根据提示输入数字或者字母后回车以选择操作(字母可不区分大小写)。" << std::endl;
 		std::cout << "输入数据时可以用空格间隔或者每输入一次即按一次回车以提交。" << std::endl;
 		std::cout << "也可以从Excel中复制数据后提交。" << std::endl;

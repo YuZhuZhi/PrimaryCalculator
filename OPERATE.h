@@ -145,6 +145,9 @@ public:
 			Data::Process::Input(y);
 			std::cout << "x平均值是:" << std::endl << Data::Process::Average(x) << std::endl;
 			std::cout << "y平均值是:" << std::endl << Data::Process::Average(y) << std::endl;
+			std::cout << "x^2平均值是:" << std::endl << Data::Process::SquareAver(x) << std::endl;
+			std::cout << "y^2平均值是:" << std::endl << Data::Process::SquareAver(y) << std::endl;
+			std::cout << "xy平均值是:" << std::endl << Data::Process::CroseAver(x, y) << std::endl;
 			std::cout << "拟合结果为：" << std::endl << "K = " << Data::LinearFit::K(x, y) << std::endl << "B = " << Data::LinearFit::B(x, y) << std::endl;
 			std::cout << "相关系数R = " << Data::LinearFit::R(x, y) << std::endl;
 		}
