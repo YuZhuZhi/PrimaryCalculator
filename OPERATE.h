@@ -192,8 +192,7 @@ public:
 				std::cout << "请输入系数a, b, c：(无需输入Ctrl+Z以确认)" << std::endl;
 				std::cin >> a >> b >> c;
 				Linear::Equation::Quadratic(a, b, c, result);
-				std::cout << "x_1 = " << result[1] << std::endl;
-				std::cout << "x_2 = " << result[2] << std::endl;
+				Linear::Equation::Print(result);
 			}
 			static void CT2()
 			{
@@ -203,9 +202,7 @@ public:
 				std::cout << "请输入系数a, b, c, d：(无需输入Ctrl+Z以确认)" << std::endl;
 				std::cin >> a >> b >> c >> d;
 				Linear::Equation::Cubic(a, b, c, d, result);
-				std::cout << "x_1 = " << result[1] << std::endl;
-				std::cout << "x_2 = " << result[2] << std::endl;
-				std::cout << "x_3 = " << result[3] << std::endl;
+				Linear::Equation::Print(result);
 			}
 			static void CT3()
 			{
@@ -223,7 +220,7 @@ public:
 					std::cout << "请输入右侧值：" << std::endl;
 					Data::Process::Input(right_value, n);
 					Linear::Equation::Set(coeff, right_value, result);
-					Linear::Equation::Print(result, Data::Process::Capacity(result));
+					Linear::Equation::Print(result);
 				}
 				if (YN == 'Y' || YN == 'y') {
 					std::vector<double> result;
@@ -231,7 +228,7 @@ public:
 					std::cout << "请输入右侧值：" << std::endl;
 					Data::Process::Input(right_value, coeff.size() - 1);
 					Linear::Equation::Set(coeff, right_value, result);
-					Linear::Equation::Print(result, Data::Process::Capacity(result));
+					Linear::Equation::Print(result);
 				}
 			}
 
@@ -281,13 +278,13 @@ public:
 					Linear::Vector::Input(y, 3);
 					Linear::Vector::VectorPro(x, y, result);
 					std::cout << "向量x, y的向量积为：" << std::endl;
-					std::cout << "(" << result[1] << ", " << result[2] << ", " << result[3] << ")" << std::endl;
+					Linear::Vector::Print(result);
 				}
 				if (YN == 'Y' || YN == 'y') {
 					std::vector<double> result;
 					if (Linear::Vector::VectorPro(x, y, result)) {
 						std::cout << "向量x, y的向量积为：" << std::endl;
-						std::cout << "(" << result[1] << ", " << result[2] << ", " << result[3] << ")" << std::endl;
+						Linear::Vector::Print(result);
 					}
 					else std::cout << "ERROR!" << std::endl;
 				}
@@ -525,7 +522,7 @@ public:
 					}
 					std::cout << "方阵的特征值为：" << std::endl;
 					if (result.size() == 1) std::cout << "无+-100以内整数值。" << std::endl;
-					else Linear::Equation::Print(result, Data::Process::Capacity(result));
+					else Linear::Equation::Print(result);
 				}
 				if (YN == 'Y' || YN == 'y') {
 					for (int i = -100; i <= 100; i++) {
@@ -536,7 +533,7 @@ public:
 					}
 					std::cout << "方阵的特征值为：" << std::endl;
 					if (result.size() == 1) std::cout << "无+-100以内整数值。" << std::endl;
-					else Linear::Equation::Print(result, Data::Process::Capacity(result));
+					else Linear::Equation::Print(result);
 				}
 			}
 			static void CT11()
