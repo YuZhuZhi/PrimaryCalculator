@@ -290,7 +290,7 @@ public:
 		static bool Plus(std::vector<std::vector<double> > matrix1, std::vector<std::vector<double> > matrix2, std::vector<std::vector<double> >& matrix3) //将matrix1加上matirx2的结果存入matirx3
 		{
 			matrix3 = matrix1;
-			Plus(matrix3, matrix2);
+			return Plus(matrix3, matrix2);
 		}
 		static bool Minus(std::vector<std::vector<double> >& matrix1, std::vector<std::vector<double> > matrix2) //将matrix1减去matirx2
 		{
@@ -305,7 +305,7 @@ public:
 		static bool Minus(std::vector<std::vector<double> > matrix1, std::vector<std::vector<double> > matrix2, std::vector<std::vector<double> >& matrix3) //将matrix1减去matirx2的结果存入matirx3
 		{
 			matrix3 = matrix1;
-			Minus(matrix3, matrix2);
+			return Minus(matrix3, matrix2);
 		}
 		static double Cofactor(std::vector<std::vector<double> > det, int R, int C) //计算方阵R行C列的余子式
 		{

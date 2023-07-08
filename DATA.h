@@ -77,7 +77,7 @@ public:
 		}
 		static double CroseAver(std::vector<double> data_set1, std::vector<double> data_set2) //计算两个等容数据集的交叉平均数
 		{
-			return (CroseSum(data_set1, data_set2) / (double)(Capacity(data_set)));
+			return (CroseSum(data_set1, data_set2) / (double)(Capacity(data_set1)));
 		}
 		static double SquareAver(std::vector<double> data_set) //计算数据集中元素平方后的平均数
 		{
