@@ -1,11 +1,8 @@
 #pragma once
 #include <cmath>
-#include <cstdio>
 #include <vector>
-#include <algorithm>
 #include <iostream>
 #include <iomanip>
-#include "DATA.h"
 #define Max(a, b) (a > b) ? a : b;
 #define Min(a, b) (a > b) ? b : a;
 
@@ -26,6 +23,7 @@ public:
 			C.resize(max);
 
 		}
+
 	};
 
 	class Matrix //行列式，矩阵相关
@@ -73,6 +71,18 @@ public:
 				std::cout << std::endl << std::endl;
 			}
 		}
+		static void Print(const Matrix& matrix) //矩阵的输出
+		{
+			for (int r = 1; r <= Row(matrix); r++) {
+				for (int c = 1; c <= Column(matrix); c++) {
+					std::cout.width(6); //总假设元素较小，每个元素有6格的空间输出
+					std::cout.flags(std::ios::right); //固定输出两位小数，故右对齐
+					std::cout.precision(2); //固定输出两位小数
+					std::cout << std::fixed << matrix._matrix[r][c] << " ";
+				}
+				std::cout << std::endl << std::endl;
+			}
+		}
 		int Rank() //返回方阵的阶数
 		{
 			if (Row(*this) != Column(*this)) return 0;
@@ -93,6 +103,20 @@ public:
 				return true;
 			}
 			else return false;
+		}
+		bool ChangeColumn(std::vector<double> target, int c)
+		{
+			if (this->_matrix[1].size() == target.size()) {
+				this->Transpose();
+				this->_matrix[c] = target;
+				this->Transpose();
+				return true;
+			}
+			else return false;
+		}
+		void ChangeElmn(double target, int r, int c)
+		{
+			this->_matrix[r][c] = target;
 		}
 		Matrix UnitMatrix(int n) //生成单位矩阵
 		{
@@ -410,52 +434,119 @@ public:
 				return true;
 			}
 		}
+
 	};
 
 	class Vector //向量运算
 	{
 	public:
-		static void Input(std::vector<double>& x) //向量输入
+		Vector()
 		{
-			Data::Process::Input(x);
+			_vector.clear();
 		}
-		static void Input(std::vector<double>& x, int n) //指定维数的向量输入
+		Vector(int n)
 		{
-			Data::Process::Input(x, n);
+			_vector.clear();
+			_vector.resize(n + 1);
 		}
-		static void Print(std::vector<double> x) //向量输出
+		void Input() //向量输入
+		{
+			this->_vector.clear();
+			this->_vector.push_back(0); //0位置以0填充
+			double temp = 0;
+			while (std::cin >> temp) { //当未输入Ctrl+Z前，总是接受输入
+				this->_vector.push_back(temp);
+			}
+			std::cin.clear(); //清除Ctrl+Z状态
+		}
+		void Input(int n) //指定维数的向量输入
+		{
+			this->_vector.clear();
+			this->_vector.push_back(0); //0位置以0填充
+			double temp = 0;
+			for (int i = 1; i <= n; i++) {
+				std::cin >> temp;
+				this->_vector.push_back(temp);
+			}
+		}
+		void Print() //向量输出
 		{
 			std::cout << "(";
-			for (std::vector<double>::iterator vdit = x.begin() + 1; vdit != x.end() - 1; vdit++) {
+			for (std::vector<double>::iterator vdit = this->_vector.begin() + 1; vdit != this->_vector.end() - 1; vdit++) {
 				std::cout << *vdit << ", ";
 			}
-			std::cout << *(x.end() - 1) << ")" << std::endl << std::endl;
+			std::cout << *(this->_vector.end() - 1) << ")" << std::endl << std::endl;
 		}
-		static double ScalarPro(std::vector<double> x, std::vector<double> y) //两个向量的向量积
+		static void Print(Vector& vector)
 		{
-			return (Data::Process::CroseSum(x, y)); //衍生自数据集的交叉和
+			std::cout << "(";
+			for (std::vector<double>::iterator vdit = vector._vector.begin() + 1; vdit != vector._vector.end() - 1; vdit++) {
+				std::cout << *vdit << ", ";
+			}
+			std::cout << *(vector._vector.end() - 1) << ")" << std::endl << std::endl;
 		}
-		static bool VectorPro(std::vector<double> x, std::vector<double> y, std::vector<double>& result) //两向量的向量积，以result承载生成向量
+		double Dimension()
 		{
-			if (x.size() == 4 && y.size() == 4) {
-				result.clear();
-				result.push_back(0);
+			return (this->_vector.size() - 1);
+		}
+		Vector Plus(const Vector& vector)
+		{
+			for (int i = 1; i <= this->Dimension(); i++) this->_vector[i] = this->_vector[i] + vector._vector[i];
+			return (*this);
+		}
+		Vector Minus(const Vector& vector)
+		{
+			for (int i = 1; i <= this->Dimension(); i++) this->_vector[i] = this->_vector[i] - vector._vector[i];
+			return (*this);
+		}
+		static double ScalarPro(const Vector& x, const Vector& y) //两个向量的向量积
+		{
+			if (Dimension(x) != Dimension(y)) return (0);
+			double crssum = 0;
+			for (int i = 1; i <= Dimension(x); i++) {
+				crssum = crssum + x._vector[i] * y._vector[i];
+			}
+			return (crssum);
+		}
+		double ScalarPro(const Vector& vector)
+		{
+			return (ScalarPro(*this, vector));
+		}
+		Vector VectorPro(const Vector& vector)
+		{
+			Vector temp;
+			if (VectorPro(*this, vector, temp)) return (temp);
+			else return (temp);
+		}
+		double Length(const Vector& x) //计算向量的长度
+		{
+			return (sqrt(ScalarPro(x, x))); //衍生自数据集的平方和
+		}
+		double Angle(const Vector& x, const Vector& y) //计算两向量间夹角
+		{
+			return (acos((ScalarPro(x, y)) / (Length(x) * Length(y))));
+		}
+
+	protected:
+		std::vector<double> _vector;
+		static double Dimension(const Vector& vector)
+		{
+			return (vector._vector.size() - 1);
+		}
+		bool VectorPro(const Vector& x, const Vector& y, Vector& result) //两向量的向量积，以result承载生成向量
+		{
+			if (Dimension(x) == 3 && Dimension(y) == 3) {
+				result._vector.clear();
+				result._vector.push_back(0);
 				Matrix temp(3, 3); //生成一个三阶行列式
-				temp.ChangeRow(x, 2);
-				temp.ChangeRow(y, 3);
-				for (int i = 1; i <= 3; i++) result.push_back(Matrix::Cofactor(temp, 1, i)); //计算对应余子式
-				result[2] = -result[2]; //第二维的值取相反数
+				std::vector<double> xtemp = x._vector, ytemp = y._vector;
+				temp.ChangeRow(xtemp, 2);
+				temp.ChangeRow(ytemp, 3);
+				for (int i = 1; i <= 3; i++) result._vector.push_back(Matrix::Cofactor(temp, 1, i)); //计算对应余子式
+				result._vector[2] = -result._vector[2]; //第二维的值取相反数
 				return true;
 			}
 			else return false;
-		}
-		static double Length(std::vector<double> x) //计算向量的长度
-		{
-			return (sqrt(Data::Process::Summary(x, 2))); //衍生自数据集的平方和
-		}
-		static double Angle(std::vector<double> x, std::vector<double> y) //计算两向量间夹角
-		{
-			return (acos((ScalarPro(x, y)) / (Length(x) * Length(y))));
 		}
 
 	};
