@@ -12,17 +12,38 @@ public:
 	class Polynomial //多项式
 	{
 	public:
-		static void Input(std::vector<double>& A, std::vector<double>& B) //多项式系数输入
+		Polynomial()
 		{
-			Data::Process::Input(A);
-			Data::Process::Input(B);
+			_poly.clear();
 		}
-		static void Multi(std::vector<double> A, std::vector<double> B, std::vector<double>& C) //两多项式相乘
+		void Input() //多项式系数输入
 		{
-			int max = Max(A.size(), B.size());
-			C.resize(max);
+			this->_poly.clear();
+			double temp = 0;
+			while (std::cin >> temp) { //当未输入Ctrl+Z前，总是接受输入
+				this->_poly.push_back(temp);
+			}
+			std::cin.clear(); //清除Ctrl+Z状态
+		}
+		void Input(int n) //指定次数的多项式输入
+		{
+			this->_poly.clear();
+			double temp = 0;
+			for (int i = 0; i <= n; i++) {
+				std::cin >> temp;
+				this->_poly.push_back(temp);
+			}
+		}
+
+		static Polynomial Multi(const Polynomial& A, const Polynomial& B, Polynomial& C) //两多项式相乘
+		{
+			int max = Max(A._poly.size(), B._poly.size());
+			C._poly.resize(max);
 
 		}
+
+	protected:
+		std::vector<double> _poly;
 
 	};
 
@@ -42,6 +63,22 @@ public:
 		{
 			_matrix.clear();
 			_matrix.resize(R + 1, std::vector<double>(C + 1));
+		}
+		void Input(int n) //给定阶数n的方阵输入
+		{
+			this->_matrix.clear();
+			double temp = 0;
+			std::vector<double> vectp;
+			for (int i = 0; i <= n; i++) vectp.push_back(0);
+			this->_matrix.push_back(vectp); //二维vector的0行填入0元素
+			for (int r = 1; r <= n; r++) {
+				vectp.resize(1, 0);
+				for (int c = 1; c <= n; c++) {
+					std::cin >> temp;
+					vectp.push_back(temp);
+				}
+				this->_matrix.push_back(vectp);
+			}
 		}
 		void Input(int R, int C) //给定行数R，列数C的矩阵输入
 		{
@@ -132,22 +169,24 @@ public:
 			for (int i = 1; i <= n; i++) this->_matrix[i][i] = num;
 			return (*this);
 		}
-		Matrix GausElmn() //将原矩阵高斯消元法为行阶梯形
+		Matrix GausElmn() //返回原矩阵高斯消元法后的行阶梯形
 		{
-			GausElmn(*this);
-			return (*this);
+			Matrix temp = *this;
+			GausElmn(temp);
+			return (temp);
 		}
-		Matrix RowSim() //将原矩阵化为行最简形
+		Matrix RowSim() //返回原矩阵的行最简形
 		{
-			RowSim(*this);
-			return (*this);
+			Matrix temp = *this;
+			RowSim(temp);
+			return (temp);
 		}
 		static double Det(const Matrix& det) //计算行列式的值
 		{
 			Matrix temp = det;
 			int n = Rank(temp);
 			if (n == 0) return -1;
-			temp.GausElmn(); //高斯消元为上阶梯形
+			temp = temp.GausElmn(); //高斯消元为上阶梯形
 			double multi = 1;
 			for (int i = 1; i <= n; i++) multi = multi * temp._matrix[i][i];
 			return (multi);
@@ -196,14 +235,14 @@ public:
 			}
 			return (Det(temp));
 		}
-		Matrix Adjoint(const Matrix& matrix) //返回方阵matrix的伴随阵
+		Matrix Adjoint() //返回方阵matrix的伴随阵
 		{
-			*this = matrix;
-			int n = Rank(matrix);
+			Matrix temp = *this;
+			int n = Rank(temp);
 			for (int r = 1; r <= n; r++) {
-				for (int c = 1; c <= n; c++) this->_matrix[r][c] = Cofactor(matrix, c, r) * pow(-1, r + c);
+				for (int c = 1; c <= n; c++) temp._matrix[r][c] = Cofactor(*this, c, r) * pow(-1, r + c);
 			}
-			return (*this);
+			return (temp);
 		}
 		Matrix Inverse() //返回原方阵的逆阵
 		{
@@ -220,10 +259,10 @@ public:
 				return (*this);
 			}
 		}
-		Matrix Power(const Matrix& matrix1, int power)
+		Matrix Power(int power)
 		{
-			*this = matrix1;
-			if (Power(matrix1, *this, power)) return (*this);
+			Matrix temp = *this;
+			if (Power(*this, temp, power)) return (*this);
 			else return (*this);
 		}
 		bool Eigen() //计算方阵的特征值和特征向量
@@ -303,7 +342,7 @@ public:
 					int temp = r;
 					RowSwap(matrix, r, c);
 					for (r = temp + 1; r <= R; r++) {
-						if (matrix._matrix[r][c] < 1e-6) {}
+						if (matrix._matrix[r][c] == 0) {}
 						else RowTrans(matrix, r, temp, -(matrix._matrix[r][c] / matrix._matrix[temp][c]));
 					}
 				}
@@ -402,9 +441,12 @@ public:
 			else {
 				Matrix inv_matrix2 = matrix2;
 				Transpose(inv_matrix2);
-				/*for (int r = 1; r <= R; r++) {
-					for (int c = 1; c <= C; c++) matrix3._matrix[r][c] = Vector::ScalarPro(matrix1._matrix[r], inv_matrix2._matrix[c]);
-				}*/
+				for (int r = 1; r <= R; r++) {
+					for (int c = 1; c <= C; c++) {
+						Vector x(matrix1._matrix[r]), y(inv_matrix2._matrix[c]);
+						matrix3._matrix[r][c] = Vector::ScalarPro(x, y);
+					}
+				}
 				return true;
 			}
 		}
@@ -448,6 +490,10 @@ public:
 		{
 			_vector.clear();
 			_vector.resize(n + 1);
+		}
+		Vector(std::vector<double> vector)
+		{
+			_vector = vector;
 		}
 		void Input() //向量输入
 		{
@@ -518,11 +564,15 @@ public:
 			if (VectorPro(*this, vector, temp)) return (temp);
 			else return (temp);
 		}
-		double Length(const Vector& x) //计算向量的长度
+		double Length() //计算向量的长度
+		{
+			return (sqrt(ScalarPro(*this, *this))); //衍生自数据集的平方和
+		}
+		static double Length(Vector x) //计算向量的长度
 		{
 			return (sqrt(ScalarPro(x, x))); //衍生自数据集的平方和
 		}
-		double Angle(const Vector& x, const Vector& y) //计算两向量间夹角
+		static double Angle(const Vector& x, const Vector& y) //计算两向量间夹角
 		{
 			return (acos((ScalarPro(x, y)) / (Length(x) * Length(y))));
 		}
@@ -556,7 +606,7 @@ public:
 	public:
 		static void Print(std::vector<double> result) //输出方程的多个解
 		{
-			int n = Data::Process::Capacity(result);
+			int n = result.size() - 1;
 			for (int i = 1; i <= n; i++) {
 				std::cout << "x_" << i << " = " << result[i] << std::endl;
 			}
@@ -594,5 +644,10 @@ public:
 		}
 	};
 
+//protected:
+//	static double ScalarPro(std::vector<double> x, std::vector<double> y)
+//	{
+//		double 
+//	}
 
 };

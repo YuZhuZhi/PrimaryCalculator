@@ -10,12 +10,14 @@
 //
 //char YN = 'N';
 //int choicefir = 0, choicesec = 0, choicethr = 0;
-//vector<double> data_set, x, y, right_value;
-//vector<vector<double> > matrix, matrix1, matrix2, matrix3, coeff;
+//vector<double> data_set, x_set, y_set, right_value;
+//Linear::Vector x, y;
+//Linear::Matrix matrix, matrix1, matrix2, matrix3, coeff;
 //
 //int main()
 //{
-//	Linear::Matrix::Input(matrix, 3, 4);
-//	Linear::Matrix::RowSim(matrix);
-//	Linear::Matrix::Print(matrix);
+//	matrix1.Input(2);
+//	matrix2.Input(2);
+//	matrix = matrix1 * matrix2;
+//	matrix.Print();
 //}

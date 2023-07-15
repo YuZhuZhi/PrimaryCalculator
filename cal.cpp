@@ -10,8 +10,9 @@ using namespace std;
 
 char YN = 'N';
 int choicefir = 0, choicesec = 0, choicethr = 0;
-vector<double> data_set, x, y, right_value;
-vector<vector<double> > matrix, matrix1, matrix2, matrix3, coeff;
+vector<double> data_set, x_set, y_set, right_value;
+Linear::Vector x, y;
+Linear::Matrix matrix, matrix1, matrix2, matrix3, coeff;
 
 int main()
 {
