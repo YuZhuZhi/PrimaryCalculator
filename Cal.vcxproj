@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BIGINTEGER.h" />
+    <ClInclude Include="COMPLEX.h" />
     <ClInclude Include="DATA.h" />
     <ClInclude Include="DISPLAY.h" />
     <ClInclude Include="LINEAR.h" />

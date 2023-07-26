@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <cstdio>
+#include "DATA.h"
 
 extern char YN;
 extern int choicefir, choicesec, choicethr;

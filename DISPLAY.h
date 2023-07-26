@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <cstdio>
 #include <Windows.h>
 #include "OPERATE.h"
 
