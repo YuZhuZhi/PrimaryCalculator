@@ -8,8 +8,8 @@ const int sleeptime = 200;
 extern char YN;
 extern int choicefir, choicesec, choicethr;
 extern std::vector<double> data_set, x_set, y_set, right_value;
-extern Linear::Vector x, y;
-extern Linear::Matrix matrix, matrix1, matrix2, matrix3, coeff;
+extern Linear::Vector<double> x, y;
+extern Linear::Matrix<double> matrix, matrix1, matrix2, matrix3, coeff;
 
 class Display
 {
@@ -49,11 +49,12 @@ public:
 	}
 	static void ChooseFirWithN()
 	{
+		START:
 		Sleep(sleeptime);
 		std::cout << "--------------------------------------------------------" << std::endl;
 		std::cout << "选择你需要的操作：" << std::endl;
 		std::cout << "1\t常规数据处理(6)" << std::endl;
-		std::cout << "2\t数学运算与多项式(5)(暂未搭载)" << std::endl;
+		std::cout << "2\t数学运算与多项式(8)" << std::endl;
 		std::cout << "3\t线性代数(3)" << std::endl << std::endl;
 		std::cout << "4\t清除已显示内容" << std::endl;
 		std::cout << "--------------------------------------------------------" << std::endl;
@@ -78,7 +79,7 @@ public:
 			break;
 		case 4:
 			system("cls");
-			ChooseFirWithN();
+			goto START;
 			break;
 		default:
 			ChooseFir();
@@ -151,10 +152,13 @@ public:
 		std::cout << "数学运算与多项式：" << std::endl;
 		std::cout << "1\t阶乘" << std::endl;
 		std::cout << "2\t双阶乘" << std::endl;
-		std::cout << "3\t36以内进制转换" << std::endl;
-		std::cout << "4\t已展开二多项式之积" << std::endl;
-		std::cout << "5\t可完全分解的多项式的展开" << std::endl << std::endl;
-		std::cout << "6...\t回到上一步" << std::endl;
+		std::cout << "3\t排列数" << std::endl;
+		std::cout << "4\t组合数" << std::endl;
+		std::cout << "5\t斐波那契数列" << std::endl;
+		std::cout << "6\t36以内进制转换" << std::endl;
+		std::cout << "7\t已展开二多项式之积(暂未搭载)" << std::endl;
+		std::cout << "8\t可完全分解的多项式的展开(暂未搭载)" << std::endl << std::endl;
+		std::cout << "9...\t回到上一步" << std::endl;
 		std::cout << "--------------------------------------------------------" << std::endl;
 		std::cin >> choicesec;
 		switch (choicesec)
@@ -173,6 +177,15 @@ public:
 			break;
 		case 5:
 			Operate::CF2::CS5();
+			break;
+		case 6:
+			Operate::CF2::CS6();
+			break;
+		case 7:
+			Operate::CF2::CS7();
+			break;
+		case 8:
+			Operate::CF2::CS8();
 			break;
 		default:
 			ChooseFir();

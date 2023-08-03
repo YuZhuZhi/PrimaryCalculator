@@ -1,12 +1,17 @@
 #pragma once
+#include <ctime>
 #include <iostream>
+#include <string>
+#include "BIGINTEGER.h"
 #include "DATA.h"
+#include "FAST.h"
+#include "LINEAR.h"
 
 extern char YN;
 extern int choicefir, choicesec, choicethr;
 extern std::vector<double> data_set, x_set, y_set, right_value;
-extern Linear::Vector x, y;
-extern Linear::Matrix matrix, matrix1, matrix2, matrix3, coeff;
+extern Linear::Vector<double> x, y;
+extern Linear::Matrix<double> matrix, matrix1, matrix2, matrix3, coeff;
 
 class Operate
 {
@@ -159,21 +164,142 @@ public:
 	public:
 		static void CS1()
 		{
-
+			std::cout << "请输入阶乘数：" << std::endl;
+			long long num = 0;
+			std::cin >> num;
+			BigInteger result(1);
+			while (num < 0) {
+				std::cout << "ERROR! Invalid Number Called!" << std::endl << "请重新输入阶乘数：" << std::endl;
+				std::cin >> num;
+			}
+			if (num == 0) std::cout << num << "! = 1" << std::endl;
+			else {
+				clock_t begin = clock();
+				result = Fast::Factorial(num);
+				clock_t end = clock();
+				std::cout << num << "! = ";
+				result.Print();
+				std::cout << std::endl << "共计" << result.Digit() << "位数" << std::endl;
+				std::cout << "共计用时" << double(end - begin) / CLOCKS_PER_SEC << "秒" << std::endl;
+			}
 		}
 		static void CS2()
 		{
-
+			std::cout << "请输入双阶乘数：" << std::endl;
+			long long num = 0;
+			std::cin >> num;
+			BigInteger result(1);
+			while (num < 0) {
+				std::cout << "ERROR! Invalid Number Called!" << std::endl << "请重新输入双阶乘数：" << std::endl;
+				std::cin >> num;
+			}
+			if (num == 0) std::cout << num << "! = 1" << std::endl;
+			else {
+				clock_t begin = clock();
+				result = Fast::DoubleFactorial(num);
+				clock_t end = clock();
+				std::cout << num << "! = ";
+				result.Print();
+				std::cout << std::endl << "共计" << result.Digit() << "位数" << std::endl;
+				std::cout << "共计用时" << double(end - begin) / CLOCKS_PER_SEC << "秒" << std::endl;
+			}
 		}
 		static void CS3()
 		{
-
+			std::cout << "请输入组合数A(n, r) (按照“10 5”形式输入)：" << std::endl;
+			long long n = 0, r = 0;
+			std::cin >> n >> r;
+			BigInteger result(1);
+			while (n < 0 || r < 0) {
+				std::cout << "ERROR! Invalid Number Called!" << std::endl << "请重新输入组合数A(n, r) (按照“10 5”形式输入)：" << std::endl;
+				std::cin >> n >> r;
+			}
+			if (n == 0 && r == 0) {
+				std::cout << "喜欢这么玩！" << std::endl;
+				exit(0);
+			}
+			else {
+				clock_t begin = clock();
+				result = Fast::A(n, r);
+				clock_t end = clock();
+				std::cout << "A(" << n << ", " << r << ") = ";
+				result.Print();
+				std::cout << std::endl << "共计" << result.Digit() << "位数" << std::endl;
+				std::cout << "共计用时" << double(end - begin) / CLOCKS_PER_SEC << "秒" << std::endl;
+			}
 		}
 		static void CS4()
 		{
-
+			std::cout << "请输入排列数C(n, r) (按照“10 5”形式输入)：" << std::endl;
+			long long n = 0, r = 0;
+			std::cin >> n >> r;
+			BigInteger result(1);
+			while (n < 0 || r < 0) {
+				std::cout << "ERROR! Invalid Number Called!" << std::endl << "请重新输入组合数A(n, r) (按照“10 5”形式输入)：" << std::endl;
+				std::cin >> n >> r;
+			}
+			if (n == 0 && r == 0) {
+				std::cout << "喜欢这么玩！" << std::endl;
+				exit(0);
+			}
+			else {
+				clock_t begin = clock();
+				result = Fast::C(n, r);
+				clock_t end = clock();
+				std::cout << "C(" << n << ", " << r << ") = ";
+				result.Print();
+				std::cout << std::endl << "共计" << result.Digit() << "位数" << std::endl;
+				std::cout << "共计用时" << double(end - begin) / CLOCKS_PER_SEC << "秒" << std::endl;
+			}
 		}
 		static void CS5()
+		{
+			std::cout << "请输入斐波那契项数：" << std::endl;
+			long long num = 0;
+			std::cin >> num;
+			BigInteger result(1);
+			while (num < 0) {
+				std::cout << "ERROR! Invalid Number Called!" << std::endl << "请重新输入斐波那契项数：" << std::endl;
+				std::cin >> num;
+			}
+			if (num == 0) std::cout << "F(0) = 0" << std::endl;
+			else {
+				clock_t begin = clock();
+				result = Fast::Fibonacci(num);
+				clock_t end = clock();
+				std::cout << "F(" << num << ") = ";
+				result.Print();
+				std::cout << std::endl << "共计" << result.Digit() << "位数" << std::endl;
+				std::cout << "共计用时" << double(end - begin) / CLOCKS_PER_SEC << "秒" << std::endl;
+			}
+		}
+		static void CS6()
+		{
+			int base = 0;
+			std::string num;
+			std::cout << "请输入欲转换数的进制(>=2, <=36)：" << std::endl;
+			std::cin >> base;
+			while (base < 2 || base > 36) {
+				std::cout << "Invalid Number!" << std::endl << "请重新输入欲转换数的进制(>=2, <=36)：" << std::endl;
+				std::cin >> base;
+			}
+			std::cout << "请输入欲转换数：" << std::endl;
+			std::cin >> num;
+			BigInteger temp = Fast::ToBase10(num, base);
+			std::cout << "请输入欲转换到的进制(>=2, <=36)：" << std::endl;
+			std::cin >> base;
+			while (base < 2 || base > 36) {
+				std::cout << "Invalid Number!" << std::endl << "请重新输入欲转换到的进制(>=2, <=36)：" << std::endl;
+				std::cin >> base;
+			}
+			num = Fast::ToBase(temp, base);
+			std::cout << "转换为" << base << "进制数：" << std::endl << num << std::endl;
+		}
+		static void CS7()
+		{
+
+		}
+		static void CS8()
 		{
 
 		}
@@ -262,10 +388,10 @@ public:
 					x.Input(n);
 					std::cout << "请输入向量y：" << std::endl;
 					y.Input(n);
-					std::cout << "向量x, y的标量积为：" << std::endl << Linear::Vector::ScalarPro(x, y) << std::endl;
+					std::cout << "向量x, y的标量积为：" << std::endl << Linear::Vector<double>::ScalarPro(x, y) << std::endl;
 				}
 				if (YN == 'Y' || YN == 'y') {
-					std::cout << "向量x, y的标量积为：" << std::endl << Linear::Vector::ScalarPro(x, y) << std::endl;
+					std::cout << "向量x, y的标量积为：" << std::endl << Linear::Vector<double>::ScalarPro(x, y) << std::endl;
 				}
 			}
 			static void CT3()
@@ -276,12 +402,12 @@ public:
 					x.Input(3);
 					std::cout << "请输入向量y：" << std::endl;
 					y.Input(3);
-					Linear::Vector result = x.VectorPro(y);
+					Linear::Vector<double> result = x.VectorPro(y);
 					std::cout << "向量x, y的向量积为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Vector result = x.VectorPro(y);
+					Linear::Vector<double> result = x.VectorPro(y);
 					std::cout << "向量x, y的向量积为：" << std::endl;
 					result.Print();
 				}
@@ -296,10 +422,10 @@ public:
 					x.Input(n);
 					std::cout << "请输入向量y：" << std::endl;
 					y.Input(n);
-					std::cout << "向量x, y的夹角为：" << std::endl << Linear::Vector::Angle(x, y) << std::endl;
+					std::cout << "向量x, y的夹角为：" << std::endl << Linear::Vector<double>::Angle(x, y) << std::endl;
 				}
 				if (YN == 'Y' || YN == 'y') {
-					std::cout << "向量x, y的夹角为：" << std::endl << Linear::Vector::Angle(x, y) << std::endl;
+					std::cout << "向量x, y的夹角为：" << std::endl << Linear::Vector<double>::Angle(x, y) << std::endl;
 				}
 			}
 
@@ -316,10 +442,10 @@ public:
 					std::cin >> n;
 					std::cout << "请输入行列式：" << std::endl;
 					matrix.Input(n);
-					std::cout << "行列式的值为：" << std::endl << Linear::Matrix::Det(matrix) << std::endl;
+					std::cout << "行列式的值为：" << std::endl << Linear::Matrix<double>::Det(matrix) << std::endl;
 				}
 				if (YN == 'Y' || YN == 'y') {
-					std::cout << "行列式的值为：" << std::endl << Linear::Matrix::Det(matrix) << std::endl;
+					std::cout << "行列式的值为：" << std::endl << Linear::Matrix<double>::Det(matrix) << std::endl;
 				}
 			}
 			static void CT2()
@@ -334,12 +460,12 @@ public:
 					matrix1.Input(R, C);
 					std::cout << "请输入矩阵2：" << std::endl;
 					matrix2.Input(R, C);
-					Linear::Matrix result = matrix1 + matrix2;
+					Linear::Matrix<double> result = matrix1 + matrix2;
 					std::cout << "和矩阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix1 + matrix2;
+					Linear::Matrix<double> result = matrix1 + matrix2;
 					std::cout << "和矩阵为：" << std::endl;
 					result.Print();
 				}
@@ -356,12 +482,12 @@ public:
 					matrix1.Input(R, C);
 					std::cout << "请输入矩阵2：" << std::endl;
 					matrix2.Input(R, C);
-					Linear::Matrix result = matrix1 - matrix2;
+					Linear::Matrix<double> result = matrix1 - matrix2;
 					std::cout << "差矩阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix1 - matrix2;
+					Linear::Matrix<double> result = matrix1 - matrix2;
 					std::cout << "差矩阵为：" << std::endl;
 					result.Print();
 				}
@@ -382,12 +508,12 @@ public:
 					std::cin >> C;
 					std::cout << "请输入矩阵2：" << std::endl;
 					matrix2.Input(R, C);
-					Linear::Matrix result = matrix1 * matrix2;
+					Linear::Matrix<double> result = matrix1 * matrix2;
 					std::cout << "矩阵之积为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix1 * matrix2;
+					Linear::Matrix<double> result = matrix1 * matrix2;
 					std::cout << "矩阵之积为：" << std::endl;
 					result.Print();
 				}
@@ -402,12 +528,12 @@ public:
 					std::cin >> C;
 					std::cout << "请输入矩阵：" << std::endl;
 					matrix1.Input(R, C);
-					Linear::Matrix result = matrix1.GausElmn();
+					Linear::Matrix<double> result = matrix1.GausElmn();
 					std::cout << "矩阵的行阶梯形矩阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix1.GausElmn();
+					Linear::Matrix<double> result = matrix1.GausElmn();
 					std::cout << "矩阵的行阶梯形矩阵为：" << std::endl;
 					result.Print();
 				}
@@ -422,12 +548,12 @@ public:
 					std::cin >> C;
 					std::cout << "请输入矩阵：" << std::endl;
 					matrix1.Input(R, C);
-					Linear::Matrix result = matrix1.RowSim();
+					Linear::Matrix<double> result = matrix1.RowSim();
 					std::cout << "矩阵的行最简形矩阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix1.RowSim();
+					Linear::Matrix<double> result = matrix1.RowSim();
 					std::cout << "矩阵的行最简形矩阵为：" << std::endl;
 					result.Print();
 				}
@@ -442,7 +568,7 @@ public:
 					matrix.Input(n);
 					std::cout << "请输入方阵的幂：" << std::endl;
 					std::cin >> power;
-					Linear::Matrix result = matrix.Power(power);
+					Linear::Matrix<double> result = matrix.Power(power);
 					std::cout << "方阵的" << power << "次幂为：" << std::endl;
 					result.Print();
 				}
@@ -451,7 +577,7 @@ public:
 					std::cout << "已继承上次输入的方阵。" << std::endl;
 					std::cout << "请输入方阵的幂：" << std::endl;
 					std::cin >> power;
-					Linear::Matrix result = matrix.Power(power);
+					Linear::Matrix<double> result = matrix.Power(power);
 					std::cout << "方阵的" << power << "次幂为：" << std::endl;
 					result.Print();
 				}
@@ -464,12 +590,12 @@ public:
 					std::cin >> n;
 					std::cout << "请输入方阵：" << std::endl;
 					matrix.Input(n);
-					Linear::Matrix result = matrix.Adjoint();
+					Linear::Matrix<double> result = matrix.Adjoint();
 					std::cout << "方阵的伴随阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix.Adjoint();
+					Linear::Matrix<double> result = matrix.Adjoint();
 					std::cout << "方阵的伴随阵为：" << std::endl;
 					result.Print();
 				}
@@ -482,12 +608,12 @@ public:
 					std::cin >> n;
 					std::cout << "请输入方阵：" << std::endl;
 					matrix.Input(n);
-					Linear::Matrix result = matrix.Inverse();
+					Linear::Matrix<double> result = matrix.Inverse();
 					std::cout << "方阵的逆阵为：" << std::endl;
 					result.Print();
 				}
 				if (YN == 'Y' || YN == 'y') {
-					Linear::Matrix result = matrix.Inverse();
+					Linear::Matrix<double> result = matrix.Inverse();
 					std::cout << "方阵的逆阵为：" << std::endl;
 					result.Print();
 				}
@@ -503,10 +629,10 @@ public:
 					std::cout << "请输入方阵：" << std::endl;
 					matrix.Input(n);
 					for (int i = -100; i <= 100; i++) {
-						Linear::Matrix temp = matrix;
-						Linear::Matrix unit = unit.UnitMatrix(n, i);
+						Linear::Matrix<double> temp = matrix;
+						Linear::Matrix<double> unit = unit.UnitMatrix(n, i);
 						temp = temp - unit;
-						if (fabs(Linear::Matrix::Det(temp)) <= 1e-6) result.push_back(i);
+						if (fabs(Linear::Matrix<double>::Det(temp)) <= 1e-6) result.push_back(i);
 					}
 					std::cout << "方阵的特征值为：" << std::endl;
 					if (result.size() == 1) std::cout << "无+-100以内整数值。" << std::endl;
@@ -514,10 +640,10 @@ public:
 				}
 				if (YN == 'Y' || YN == 'y') {
 					for (int i = -100; i <= 100; i++) {
-						Linear::Matrix temp = matrix;
-						Linear::Matrix unit = unit.UnitMatrix(matrix.Rank(), i);
+						Linear::Matrix<double> temp = matrix;
+						Linear::Matrix<double> unit = unit.UnitMatrix(matrix.Rank(), i);
 						temp = temp - unit;
-						if (fabs(Linear::Matrix::Det(temp)) <= 1e-6) result.push_back(i);
+						if (fabs(Linear::Matrix<double>::Det(temp)) <= 1e-6) result.push_back(i);
 					}
 					std::cout << "方阵的特征值为：" << std::endl;
 					if (result.size() == 1) std::cout << "无+-100以内整数值。" << std::endl;

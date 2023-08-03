@@ -3,12 +3,11 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#define Max(a, b) (a > b) ? a : b;
-#define Min(a, b) (a > b) ? b : a;
 
 class Linear
 {
 public:
+	template <typename T>
 	class Polynomial //多项式
 	{
 	public:
@@ -42,10 +41,11 @@ public:
 		}
 
 	protected:
-		std::vector<double> _poly;
+		std::vector<T> _poly;
 
 	};
 
+	template <typename T>
 	class Matrix //行列式，矩阵相关
 	{
 	public:
@@ -56,22 +56,26 @@ public:
 		Matrix(const int n)
 		{
 			_matrix.clear();
-			_matrix.resize(n + 1, std::vector<double>(n + 1));
+			_matrix.resize(n + 1, std::vector<T>(n + 1));
 		}
 		Matrix(const int R, const int C)
 		{
 			_matrix.clear();
-			_matrix.resize(R + 1, std::vector<double>(C + 1));
+			_matrix.resize(R + 1, std::vector<T>(C + 1));
 		}
 		Matrix(const Matrix& matrix)
 		{
 			_matrix = matrix._matrix;
 		}
+		Matrix(const std::vector<std::vector<T> >& matrix)
+		{
+			_matrix = matrix;
+		}
 		void Input(const int n) //给定阶数n的方阵输入
 		{
 			this->_matrix.clear();
-			double temp = 0;
-			std::vector<double> vectp;
+			T temp = 0;
+			std::vector<T> vectp;
 			for (int i = 0; i <= n; i++) vectp.push_back(0);
 			this->_matrix.push_back(vectp); //二维vector的0行填入0元素
 			for (int r = 1; r <= n; r++) {
@@ -86,8 +90,8 @@ public:
 		void Input(const int R, const int C) //给定行数R，列数C的矩阵输入
 		{
 			this->_matrix.clear();
-			double temp = 0;
-			std::vector<double> vectp;
+			T temp = 0;
+			std::vector<T> vectp;
 			for (int i = 1; i <= C + 1; i++) vectp.push_back(0);
 			this->_matrix.push_back(vectp); //二维vector的0行填入0元素
 			for (int r = 1; r <= R; r++) {
@@ -99,7 +103,7 @@ public:
 				this->_matrix.push_back(vectp);
 			}
 		}
-		void Print() //矩阵的输出
+		void Print() const //矩阵的输出
 		{
 			for (int r = 1; r <= Row(*this); r++) {
 				for (int c = 1; c <= Column(*this); c++) {
@@ -111,20 +115,20 @@ public:
 				std::cout << std::endl << std::endl;
 			}
 		}
-		int Rank() //返回方阵的阶数
+		int Rank() const //返回方阵的阶数
 		{
 			if (Row(*this) != Column(*this)) return 0;
 			else return (this->_matrix.size() - 1);
 		}
-		int Row() //返回矩阵的行数
+		int Row() const //返回矩阵的行数
 		{
-			return (Row(*this));
+			return (this->_matrix.size() - 1);
 		}
-		int Column() //返回矩阵的列数
+		int Column() const //返回矩阵的列数
 		{
-			return (Column(*this));
+			return (this->_matrix[1].size() - 1);
 		}
-		bool ChangeRow(const std::vector<double>& target, const int r)
+		bool SetRow(const std::vector<T>& target, const int r)
 		{
 			if (this->_matrix.size() == target.size()) {
 				this->_matrix[r] = target;
@@ -132,7 +136,7 @@ public:
 			}
 			else return false;
 		}
-		bool ChangeColumn(const std::vector<double>& target, const int c)
+		bool SetColumn(const std::vector<T>& target, const int c)
 		{
 			if (this->_matrix[1].size() == target.size()) {
 				this->Transpose();
@@ -142,17 +146,21 @@ public:
 			}
 			else return false;
 		}
-		void ChangeElmn(const double target, const int r, const int c)
+		void SetElmn(const T target, const int r, const int c)
 		{
 			this->_matrix[r][c] = target;
+		}
+		T GetElmn(const int r, const int c)
+		{
+			return (this->_matrix[r][c]);
 		}
 		Matrix UnitMatrix(const int n) //生成单位矩阵
 		{
 			Matrix matrix(n);
-			for (int i = 1; i <= n; i++) matrix._matrix[i][i] = 1;
+			for (int i = 1; i <= n; i++) matrix._matrix[i][i] = (T)1;
 			return matrix;
 		}
-		Matrix UnitMatrix(const int n, const double multi) //生成单位矩阵的multi倍
+		Matrix UnitMatrix(const int n, const T multi) //生成单位矩阵的multi倍
 		{
 			Matrix matrix(n);
 			for (int i = 1; i <= n; i++) this->_matrix[i][i] = multi;
@@ -212,12 +220,8 @@ public:
 		}
 		Matrix& Multi(const Matrix& matrix1, const Matrix& matrix2) //返回matrix1与matrix2之积
 		{
-			if (Multi(matrix1, matrix2, *this)) {
-				return (*this);
-			}
-			else {
-				return (*this);
-			}
+			if (Multi(matrix1, matrix2, *this)) return (*this);
+			else return (*this);
 		}
 		Matrix Power(const int power)
 		{
@@ -230,7 +234,7 @@ public:
 			this->_matrix = matrix._matrix;
 			return (*this);
 		}
-		Matrix operator+(const Matrix& matrix) //不改变this和matrix
+		Matrix operator+(const Matrix& matrix) const //不改变this和matrix
 		{
 			int R = Row(*this), C = Column(*this);
 			Matrix temp(R, C);
@@ -239,7 +243,7 @@ public:
 			}
 			return temp;
 		}
-		Matrix operator-(const Matrix& matrix) //不改变this和matrix
+		Matrix operator-(const Matrix& matrix) const //不改变this和matrix
 		{
 			int R = Row(*this), C = Column(*this);
 			Matrix temp(R, C);
@@ -248,11 +252,17 @@ public:
 			}
 			return temp;
 		}
-		Matrix operator*(const Matrix& matrix) //不改变this和matrix
+		Matrix operator*(const Matrix& matrix)  //不改变this和matrix
 		{
-			Matrix temp;
-			if (Multi(*this, matrix, temp)) return temp;
-			else return temp;
+			Matrix result;
+			if (Multi(*this, matrix, result)) return result;
+			else return result;
+		}
+		Matrix operator/(const Matrix& matrix) 
+		{
+			Matrix temp = matrix, result;
+			if (Multi(*this, temp.Inverse(), result)) return result;
+			else return result;
 		}
 		bool Eigen() //计算方阵的特征值和特征向量
 		{
@@ -285,19 +295,19 @@ public:
 		{
 			return (matrix._matrix[1].size() - 1);
 		}
-		static double Det(const Matrix& det) //计算行列式的值
+		static T Det(const Matrix& det) //计算行列式的值
 		{
 			Matrix temp = det;
 			int n = Rank(temp);
 			if (n == 0) return -1;
 			temp = temp.GausElmn(); //高斯消元为上阶梯形
-			double multi = 1;
+			T multi = 1;
 			for (int i = 1; i <= n; i++) multi = multi * temp._matrix[i][i];
 			return (multi);
 		}
-		static double Cofactor(const Matrix& det, const int R, const int C) //计算方阵R行C列的余子式
+		static T Cofactor(const Matrix& det, const int R, const int C) //计算方阵R行C列的余子式
 		{
-			Matrix temp(R - 1, C - 1);
+			Matrix temp(Row(det) - 1, Column(det) - 1);
 			for (int r = 1; r <= Row(det); r++) {
 				if (r < R) {
 					for (int c = 1; c <= Column(det); c++) {
@@ -316,13 +326,13 @@ public:
 		}
 
 	protected:
-		std::vector<std::vector<double> > _matrix;
-		void RowTrans(Matrix& matrix, const int r, const double k) //将r行乘k倍
+		std::vector<std::vector<T> > _matrix;
+		void RowTrans(Matrix& matrix, const int r, const T k) //将r行乘k倍
 		{
 			int n = matrix._matrix[1].size() - 1;
 			for (int i = 1; i <= n; i++) matrix._matrix[r][i] = k * matrix._matrix[r][i];
 		}
-		void RowTrans(Matrix& matrix, const int r1, const int r2, const double k) //将r1行加上r2行的k倍，r1 = r1 + k * r2
+		void RowTrans(Matrix& matrix, const int r1, const int r2, const T k) //将r1行加上r2行的k倍，r1 = r1 + k * r2
 		{
 			int n = matrix._matrix[1].size() - 1;
 			for (int i = 1; i <= n; i++) matrix._matrix[r1][i] = matrix._matrix[r1][i] + k * matrix._matrix[r2][i];
@@ -343,7 +353,7 @@ public:
 					int temp = r;
 					RowSwap(matrix, r, c);
 					for (r = temp + 1; r <= R; r++) {
-						if (matrix._matrix[r][c] == 0) {}
+						if (fabs(matrix._matrix[r][c]) <= 1e-6) break;
 						else RowTrans(matrix, r, temp, -(matrix._matrix[r][c] / matrix._matrix[temp][c]));
 					}
 				}
@@ -424,11 +434,11 @@ public:
 		bool Inverse(const Matrix& matrix1, Matrix& matrix2) //计算方阵的逆阵，结果存入matrix2
 		{
 			matrix2 = matrix1;
-			double M = Det(matrix1);
-			if (Row(matrix1) != Column(matrix1) || M == 0) return false;
+			T M = Det(matrix1);
+			if (Row(matrix1) != Column(matrix1) || M == (T)0) return false;
 			else {
 				for (int r = 1; r <= Rank(matrix1); r++) {
-					for (int c = 1; c <= Rank(matrix1); c++) matrix2._matrix[r][c] = (Cofactor(matrix1, c, r) / M) * pow(-1, r + c);
+					for (int c = 1; c <= Rank(matrix1); c++) matrix2._matrix[r][c] = ((T)Cofactor(matrix1, c, r) / M) * (T)pow(-1, r + c);
 				}
 				return true;
 			}
@@ -437,15 +447,14 @@ public:
 		{
 			int R = Row(matrix1), C = Column(matrix2);
 			matrix3._matrix.clear();
-			matrix3._matrix.resize(matrix1._matrix.size(), std::vector<double>(matrix2._matrix[1].size(), 0));
+			matrix3._matrix.resize(matrix1._matrix.size(), std::vector<T>(matrix2._matrix[1].size(), 0));
 			if (matrix1._matrix[1].size() != matrix2._matrix.size()) return false;
 			else {
 				Matrix inv_matrix2 = matrix2;
 				Transpose(inv_matrix2);
 				for (int r = 1; r <= R; r++) {
 					for (int c = 1; c <= C; c++) {
-						Vector x(matrix1._matrix[r]), y(inv_matrix2._matrix[c]);
-						matrix3._matrix[r][c] = Vector::ScalarPro(x, y);
+						matrix3._matrix[r][c] = VectorMulti(matrix1._matrix[r], inv_matrix2._matrix[c]);
 					}
 				}
 				return true;
@@ -477,9 +486,16 @@ public:
 				return true;
 			}
 		}
+		T VectorMulti(const std::vector<T>& A, const std::vector<T>& B)
+		{
+			T result = 0;
+			for (int i = 1; i <= A.size() - 1; i++) result = result + A[i] * B[i];
+			return result;
+		}
 
 	};
 
+	template <typename T>
 	class Vector //向量运算
 	{
 	public:
@@ -504,7 +520,7 @@ public:
 		{
 			this->_vector.clear();
 			this->_vector.push_back(0); //0位置以0填充
-			double temp = 0;
+			T temp = 0;
 			while (std::cin >> temp) { //当未输入Ctrl+Z前，总是接受输入
 				this->_vector.push_back(temp);
 			}
@@ -514,21 +530,22 @@ public:
 		{
 			this->_vector.clear();
 			this->_vector.push_back(0); //0位置以0填充
-			double temp = 0;
+			T temp = 0;
 			for (int i = 1; i <= n; i++) {
 				std::cin >> temp;
 				this->_vector.push_back(temp);
 			}
 		}
-		void Print() //向量输出
+		void Print() const //向量输出
 		{
+			auto temp = this->_vector;
 			std::cout << "(";
-			for (std::vector<double>::iterator vdit = this->_vector.begin() + 1; vdit != this->_vector.end() - 1; vdit++) {
+			for (auto vdit = temp.begin() + 1; vdit != temp.end() - 1; vdit++) {
 				std::cout << *vdit << ", ";
 			}
 			std::cout << *(this->_vector.end() - 1) << ")" << std::endl << std::endl;
 		}
-		double Dimension()
+		int Dimension() const
 		{
 			return (this->_vector.size() - 1);
 		}
@@ -542,21 +559,21 @@ public:
 			for (int i = 1; i <= this->Dimension(); i++) this->_vector[i] = this->_vector[i] - vector._vector[i];
 			return (*this);
 		}
-		Vector VectorPro(const Vector& vector)
+		Vector VectorPro(const Vector& vector) 
 		{
 			Vector temp;
 			if (VectorPro(*this, vector, temp)) return (temp);
 			else return (temp);
 		}
-		double ScalarPro(const Vector& vector)
+		double ScalarPro(const Vector& vector) const
 		{
 			return (ScalarPro(*this, vector));
 		}
-		double Length() //计算向量的长度
+		double Length() const //计算向量的长度
 		{
 			return (sqrt(ScalarPro(*this, *this)));
 		}
-		double Norm(const int power)
+		double Norm(const int power) const
 		{
 			int n = this->Dimension();
 			double temp = 0;
@@ -565,7 +582,7 @@ public:
 			}
 			return (pow(temp, 1.0 / (double)power));
 		}
-		double Angle(const Vector& vector)
+		double Angle(const Vector& vector) const
 		{
 			return Angle(*this, vector);
 		}
@@ -574,7 +591,7 @@ public:
 		{
 			Vector temp = vector;
 			std::cout << "(";
-			for (std::vector<double>::iterator vdit = temp._vector.begin() + 1; vdit != temp._vector.end() - 1; vdit++) {
+			for (auto vdit = temp._vector.begin() + 1; vdit != temp._vector.end() - 1; vdit++) {
 				std::cout << *vdit << ", ";
 			}
 			std::cout << *(temp._vector.end() - 1) << ")" << std::endl << std::endl;
@@ -611,17 +628,17 @@ public:
 		}
 
 	protected:
-		std::vector<double> _vector;
+		std::vector<T> _vector;
 		bool VectorPro(const Vector& x, const Vector& y, Vector& result) //两向量的向量积，以result承载生成向量
 		{
 			if (Dimension(x) == 3 && Dimension(y) == 3) {
 				result._vector.clear();
 				result._vector.push_back(0);
-				Matrix temp(3, 3); //生成一个三阶行列式
+				Matrix<T> temp(3, 3); //生成一个三阶行列式
 				std::vector<double> xtemp = x._vector, ytemp = y._vector;
-				temp.ChangeRow(xtemp, 2);
-				temp.ChangeRow(ytemp, 3);
-				for (int i = 1; i <= 3; i++) result._vector.push_back(Matrix::Cofactor(temp, 1, i)); //计算对应余子式
+				temp.SetRow(xtemp, 2);
+				temp.SetRow(ytemp, 3);
+				for (int i = 1; i <= 3; i++) result._vector.push_back(Matrix<T>::Cofactor(temp, 1, i)); //计算对应余子式
 				result._vector[2] = -result._vector[2]; //第二维的值取相反数
 				return true;
 			}
@@ -656,17 +673,17 @@ public:
 		{
 			return true;
 		}
-		static bool Set(const Matrix coeff, const std::vector<double> right, std::vector<double>& result) //解方程组，以result承装解
+		static bool Set(const Matrix<double> coeff, const std::vector<double> right, std::vector<double>& result) //解方程组，以result承装解
 		{
 			result.clear();
-			result.push_back(Matrix::Det(coeff)); //0位置填入系数行列式
+			result.push_back(Matrix<double>::Det(coeff)); //0位置填入系数行列式
 			if (result[0] == 0) return false;
 			else {
-				for (int i = 1; i <= Matrix::Rank(coeff); i++) {
-					Matrix temp = coeff;
+				for (int i = 1; i <= Matrix<double>::Rank(coeff); i++) {
+					Matrix<double> temp = coeff;
 					temp.Transpose();
-					temp.ChangeRow(right, i);
-					result.push_back((Matrix::Det(temp)) / result[0]);
+					temp.SetRow(right, i);
+					result.push_back((Matrix<double>::Det(temp)) / result[0]);
 				}
 				return true;
 			}

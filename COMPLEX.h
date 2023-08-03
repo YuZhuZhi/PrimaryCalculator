@@ -38,7 +38,7 @@ public:
 		std::cin >> _re;
 		std::cin >> _im;
 	}
-	void Print()			
+	void Print() const
 	{
 		if (_re != 0 && _im != 0) {
 			if (_im > 0) {
@@ -85,7 +85,7 @@ public:
 			return;
 		}
 	}
-	void PrintPolar()
+	void PrintPolar() const
 	{
 		std::cout << this->Modulus() << "e^{" << Arg(*this) << "i}";
 	}
@@ -99,11 +99,11 @@ public:
 		Complex temp(0, multi);
 		return temp;
 	}
-	double Re()
+	double Re() const
 	{
 		return _re;
 	}
-	double Im()
+	double Im() const
 	{
 		return _im;
 	}
@@ -117,27 +117,27 @@ public:
 		_im = imaginary;
 		return _im;
 	}
-	double Modulus()
+	double Modulus() const
 	{
 		return (sqrt(_re * _re + _im * _im));
 	}
-	double SquareModulus()
+	double SquareModulus() const
 	{
 		return (_re * _re + _im * _im);
 	}
-	double Arg()
+	double Arg() const
 	{
 		return (atan2(_re, _im));
 	}
-	Complex Power(const double power)
+	Complex Power(const double power) const
 	{
 		return (Power(*this, power));
 	}
-	Complex Root(const double root)
+	Complex Root(const double root) const
 	{
 		return (Root(*this, root));
 	}
-	Complex Conjugate()
+	Complex Conjugate() const
 	{
 		Complex result = *this;
 		result._im = -result._im;
@@ -148,28 +148,28 @@ public:
 		this->_re = complex._re;
 		this->_im = complex._im;
 	}
-	Complex operator+(const Complex& complex)
+	Complex operator+(const Complex& complex) const
 	{
 		Complex temp;
 		temp._re = this->_re + complex._re;
 		temp._im = this->_im + complex._im;
 		return temp;
 	}
-	Complex operator-(const Complex& complex)
+	Complex operator-(const Complex& complex) const
 	{
 		Complex temp;
 		temp._re = this->_re - complex._re;
 		temp._im = this->_im - complex._im;
 		return temp;
 	}
-	Complex operator*(const Complex& complex)
+	Complex operator*(const Complex& complex) const
 	{
 		Complex result;
 		result._re = this->_re * complex._re - this->_im * complex._im;
 		result._im = this->_re * complex._im + this->_im * complex._re;
 		return result;
 	}
-	Complex operator/(const Complex& complex)
+	Complex operator/(const Complex& complex) const
 	{
 		Complex copy = complex;
 		Complex result = *this * copy.Conjugate();
@@ -183,26 +183,26 @@ public:
 		this->_re = real;
 		this->_im = 0;
 	}
-	Complex operator+(const double real)
+	Complex operator+(const double real) const
 	{
 		Complex temp;
 		temp._re = this->_re + real;
 		return temp;
 	}
-	Complex operator-(const double real)
+	Complex operator-(const double real) const
 	{
 		Complex temp;
 		temp._re = this->_re - real;
 		return temp;
 	}
-	Complex operator*(const double real)
+	Complex operator*(const double real) const
 	{
 		Complex result;
 		result._re = this->_re * real;
 		result._im = this->_im * real;
 		return result;
 	}
-	Complex operator/(const double real)
+	Complex operator/(const double real) const
 	{
 		Complex result = *this;
 		result._re = result._re / real;
@@ -215,22 +215,22 @@ public:
 		this->_im = -this->_im;
 		return (*this);
 	}
-	bool operator==(const Complex& complex)
+	bool operator==(const Complex& complex) const
 	{
 		if (this->_re == complex._re && this->_im == complex._im) return true;
 		else return false;
 	}
-	bool operator!=(const Complex& complex)
+	bool operator!=(const Complex& complex) const
 	{
 		if (this->_re != complex._re || this->_im != complex._im) return true;
 		else return false;
 	}
-	bool operator==(const double real)
+	bool operator==(const double real) const
 	{
 		if (this->_im == 0 && this->_re == real) return true;
 		else return false;
 	}
-	bool operator!=(const double real)
+	bool operator!=(const double real) const
 	{
 		if (this->_im != 0 || this->_re != real) return true;
 		else return false;

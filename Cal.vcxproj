@@ -131,6 +131,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FAST.h" />
     <ClInclude Include="BIGINTEGER.h" />
     <ClInclude Include="COMPLEX.h" />
     <ClInclude Include="DATA.h" />
