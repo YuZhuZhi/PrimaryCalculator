@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
-#define Max(a, b) (a > b) ? a : b;
-#define Min(a, b) (a > b) ? b : a;
 
 class Data
 {
@@ -112,30 +110,26 @@ public:
 		}
 		static int ModeNum(const std::vector<double>& data_set, std::vector<int>& mode_nums) //计算数据集的众数，用mode_nums承装找到的众数，返回值是其中一个众数出现的次数
 		{
-			std::vector<double> temp = data_set;
+			int count = 1;
+			struct dat {
+				int _num;
+				int _count;
+			};
+			std::vector<dat> stat;
 			mode_nums.resize(0);
-			temp.erase(temp.begin()); //删除0位置的0元素
-			std::vector<int> data_set_int(temp.begin(), temp.end()); //如果输入的数据集是浮点数，转化为整型
+			std::vector<int> data_set_int(data_set.begin() + 1, data_set.end()); //如果输入的数据集是浮点数，转化为整型
 			sort(data_set_int.begin(), data_set_int.end()); //排序
-			int max = 0, count = 1;
 			for (std::vector<int>::iterator viit = data_set_int.begin() + 1; viit != data_set_int.end(); viit++) {
 				if (*(viit) == *(viit - 1)) count++; //如果当前数与前一个数相等，那么计数器count+1
 				else {
-					max = Max(max, count); //否则比较max和count并更新max为较大者
-					count = 1;
+					stat.push_back({ *(viit - 1), count });
+					count = 1; //计数器归1
 				}
-				if (viit == data_set_int.end() - 1) max = Max(max, count); //当当前数是最后一个数，还需要再比较一次
+				if (viit == data_set_int.end() - 1) stat.push_back({ *(viit - 1), count }); //当当前数是最后一个数，还需要再push一次
 			}
-			count = 1;
-			for (std::vector<int>::iterator viit = data_set_int.begin() + 1; viit != data_set_int.end(); viit++) {
-				if (*(viit) == *(viit - 1)) count++; //如果当前数与前一个数相等，那么计数器count+1
-				else {
-					if (count == max) mode_nums.push_back(*(viit - 1)); //如果当前数的个数恰是max，那么当前数就是众数之一
-					count = 1;
-				}
-				if (viit == data_set_int.end() - 1 && count == max) mode_nums.push_back(*(viit - 1)); //当当前数是最后一个数，还需要再比较一次
-			}
-			return max;
+			sort(stat.begin(), stat.end(), [](dat x, dat y) {return x._count > y._count; }); //按dat中的_count大小降序排列
+			for (int i = 0, const int max = stat[0]._count; stat[i]._count == max; i++) mode_nums.push_back(stat[i]._num);
+			return stat[0]._count;
 		}
 	};
 

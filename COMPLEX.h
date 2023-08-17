@@ -236,11 +236,6 @@ public:
 		else return false;
 	}
 
-	static void Print(const Complex& complex)
-	{
-		Complex temp = complex;
-		temp.Print();
-	}
 	static double Re(const Complex& complex)
 	{
 		return complex._re;

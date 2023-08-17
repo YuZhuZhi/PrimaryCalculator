@@ -87,7 +87,7 @@ public:
 	{
 		Linear::Matrix<BigInteger> coeff(2);
 		coeff.SetElmn(1, 1, 1), coeff.SetElmn(1, 1, 2), coeff.SetElmn(1, 2, 1), coeff.SetElmn(0, 2, 2);
-		coeff = Power(coeff, num + 1);
+		coeff = MatrixPower(coeff, num);
 		return (coeff.GetElmn(2, 2));
 	}
 	static BigInteger ToBase10(const std::string& num, const int base)
@@ -115,9 +115,23 @@ public:
 	template <typename T>
 	static T Power(const T& back, const long long power)
 	{
-		T result = back, copy = back;
-		result = result / result;
-
+		T result = 1, copy = back;
+		if (power > 0) {
+			long long pow = power;
+			while (pow) {
+				if (pow & 1) result = result * copy;
+				copy = copy * copy;
+				pow = pow / 2;
+			}
+			return result;
+		}
+		else return back;
+	}
+	template <typename T>
+	static Linear::Matrix<T> MatrixPower(const Linear::Matrix<T>& back, const long long power)
+	{
+		Linear::Matrix<T> result = back, copy = back;
+		result.UnitMatrix(back.Rank());
 		if (power > 0) {
 			long long pow = power;
 			while (pow) {

@@ -347,13 +347,13 @@ public:
 			for (int c = 1; c <= C; c++) {
 				int r = 1;
 				for (r = c; r <= R; r++) {
-					if (fabs(matrix._matrix[r][c]) >= 1e-6) break;
+					if (fabs((double)matrix._matrix[r][c]) >= 1e-6) break;
 				}
 				if (r <= R) {
 					int temp = r;
 					RowSwap(matrix, r, c);
 					for (r = temp + 1; r <= R; r++) {
-						if (fabs(matrix._matrix[r][c]) <= 1e-6) break;
+						if (fabs((double)matrix._matrix[r][c]) <= 1e-6) break;
 						else RowTrans(matrix, r, temp, -(matrix._matrix[r][c] / matrix._matrix[temp][c]));
 					}
 				}
