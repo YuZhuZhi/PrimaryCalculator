@@ -121,7 +121,7 @@ public:
 	{
 		return (sqrt(_re * _re + _im * _im));
 	}
-	double SquareModulus() const
+	double ModulusSquare() const
 	{
 		return (_re * _re + _im * _im);
 	}
@@ -173,7 +173,7 @@ public:
 	{
 		Complex copy = complex;
 		Complex result = *this * copy.Conjugate();
-		double temp = copy.SquareModulus();
+		double temp = copy.ModulusSquare();
 		result._re = result._re / temp;
 		result._im = result._im / temp;
 		return result;
@@ -248,7 +248,7 @@ public:
 	{
 		return (sqrt(complex._re * complex._re + complex._im * complex._im));
 	}
-	static double SquareModulus(const Complex& complex)
+	static double ModulusSquare(const Complex& complex)
 	{
 		return (complex._re * complex._re + complex._im * complex._im);
 	}

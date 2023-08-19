@@ -10,14 +10,10 @@
 //char YN = 'N';
 //int choicefir = 0, choicesec = 0, choicethr = 0;
 //vector<double> data_set, x_set, y_set, right_value;
-//Linear::Vector x, y;
-//Linear::Matrix matrix, matrix1, matrix2, matrix3, coeff;
+//Linear::Vector<double> x, y;
+//Linear::Matrix<double> matrix, matrix1, matrix2, matrix3, coeff;
 //
 //int main()
 //{
-//	int r, c;
-//	cin >> r >> c;
-//	matrix.Input(r, c);
-//	matrix1 = matrix.Transpose();
-//	matrix1.Print();
+//	cout << "x^";
 //}

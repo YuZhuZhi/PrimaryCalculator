@@ -15,6 +15,14 @@ public:
 		{
 			_poly.clear();
 		}
+		Polynomial(int num)
+		{
+			_poly.resize(num);
+		}
+		Polynomial(const Polynomial& poly)
+		{
+			_poly = poly._poly;
+		}
 		void Input() //多项式系数输入
 		{
 			this->_poly.clear();
@@ -33,10 +41,54 @@ public:
 				this->_poly.push_back(temp);
 			}
 		}
-		static Polynomial Multi(const Polynomial& A, const Polynomial& B, Polynomial& C) //两多项式相乘
+		void Print() const
 		{
-			int max = Max(A._poly.size(), B._poly.size());
-			C._poly.resize(max);
+			std::cout << *(this->_poly.end() - 1) << "x^" << this->Highest();
+			for (int i = this->Highest() - 1; i >= 0; i--) {
+				if (this->_poly[i] > 0) std::cout << ' + ' << this->_poly[i] << "x^" << i;
+				else if (this->_poly[i] < 0) std::cout << ' - ' << -this->_poly[i] << "x^" << i;
+			}
+		}
+		int Terms() const
+		{
+			return (this->_poly.size());
+		}
+		int Highest() const
+		{
+			return (this->_poly.size() - 1);
+		}
+		Polynomial& operator=(const Polynomial& poly)
+		{
+			this->_poly = poly._poly;
+		}
+		Polynomial operator+(const Polynomial& poly) const //两多项式相加
+		{
+			if (this->Highest() >= poly.Highest()) {
+				Polynomial result(*this);
+
+			}
+			else if (this->Highest() < poly.Highest()) {
+				Polynomial result(poly);
+
+			}
+
+		}
+		Polynomial operator-(const Polynomial& poly) const //两多项式相减
+		{
+			if (this->Highest() >= poly.Highest()) {
+				Polynomial result(*this);
+
+			}
+			else if (this->Highest() < poly.Highest()) {
+				Polynomial result(poly);
+
+			}
+
+		}
+		Polynomial operator*(const Polynomial& poly) const //两多项式相乘
+		{
+			Polynomial result(this->_poly.size() * poly._poly.size());
+
 
 		}
 

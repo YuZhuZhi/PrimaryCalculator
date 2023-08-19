@@ -107,7 +107,7 @@ public:
 		BigInteger copy(num), bbase(base), remain(0);
 		while (copy != (long long)0) {
 			copy = BigInteger::Division(copy, bbase, remain);
-			result.insert(result.begin(), unit[(int)remain]);
+			result.insert(result.begin(), unit[(long long)remain]);
 		}
 		return result;
 	}

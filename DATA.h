@@ -128,7 +128,8 @@ public:
 				if (viit == data_set_int.end() - 1) stat.push_back({ *(viit - 1), count }); //当当前数是最后一个数，还需要再push一次
 			}
 			sort(stat.begin(), stat.end(), [](dat x, dat y) {return x._count > y._count; }); //按dat中的_count大小降序排列
-			for (int i = 0, const int max = stat[0]._count; stat[i]._count == max; i++) mode_nums.push_back(stat[i]._num);
+			const int max = stat[0]._count;
+			for (int i = 0; stat[i]._count == max; i++) mode_nums.push_back(stat[i]._num);
 			return stat[0]._count;
 		}
 	};

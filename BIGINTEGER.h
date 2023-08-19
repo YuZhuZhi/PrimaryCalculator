@@ -37,7 +37,7 @@ public:
 			_number.push_back(0);
 		}
 	}
-	BigInteger(const std::vector<short> num)
+	BigInteger(const std::vector<short>& num)
 	{
 		_sign = '+';
 		_number = num;
@@ -135,18 +135,6 @@ public:
 		this->_number = num._number;
 		return (*this);
 	}
-	BigInteger& operator=(const long long num)
-	{
-		BigInteger temp(num);
-		*this = temp;
-		return (*this);
-	}
-	BigInteger& operator=(const std::string& num)
-	{
-		BigInteger temp(num);
-		*this = temp;
-		return (*this);
-	}
 	BigInteger operator+(const BigInteger& num) const
 	{
 		BigInteger result = *this, copy = num;
@@ -173,14 +161,6 @@ public:
 			else return (copy - (-result)); //如果this是负数，那么相当于num - -this
 		}
 	}
-	BigInteger operator+(const long long num) const
-	{
-		return (*this + (BigInteger)num);
-	}
-	BigInteger operator+(const std::string& num) const
-	{
-		return (*this + (BigInteger)num);
-	}
 	BigInteger operator-(const BigInteger& num) const
 	{
 		BigInteger result = *this, copy = num;
@@ -203,14 +183,6 @@ public:
 			else return (-((-result) + copy)); //如果this是负数，那么相当于-(-this + -num)
 		}
 	}
-	BigInteger operator-(const long long num) const
-	{
-		return (*this - (BigInteger)num);
-	}
-	BigInteger operator-(const std::string& num) const
-	{
-		return (*this - (BigInteger)num);
-	}
 	BigInteger operator*(const BigInteger& num) const
 	{
 		BigInteger result, copy = *this;
@@ -229,14 +201,6 @@ public:
 		EraseZero(result);
 		return result;
 	}
-	BigInteger operator*(const long long num) const
-	{
-		return (*this * (BigInteger)num);
-	}
-	BigInteger operator*(const std::string& num) const
-	{
-		return (*this * (BigInteger)num);
-	}
 	BigInteger operator/(const BigInteger& num) const
 	{
 		BigInteger result, remain;
@@ -245,27 +209,11 @@ public:
 		else result._sign = '-';
 		return result;
 	}
-	BigInteger operator/(const long long num) const
-	{
-		return (*this / (BigInteger)num);
-	}
-	BigInteger operator/(const std::string& num) const
-	{
-		return (*this / (BigInteger)num);
-	}
 	BigInteger operator%(const BigInteger& num) const
 	{
 		BigInteger remain;
 		Division(*this, num, remain);
 		return remain;
-	}
-	BigInteger operator%(const long long num) const
-	{
-		return (*this % (BigInteger)num);
-	}
-	BigInteger operator%(const std::string& num) const
-	{
-		return (*this % (BigInteger)num);
 	}
 	bool operator>(const BigInteger& num) const
 	{
@@ -283,14 +231,6 @@ public:
 		}
 		return false;
 	}
-	bool operator>(const long long num) const
-	{
-		return (*this > (BigInteger)num);
-	}
-	bool operator>(const std::string& num) const
-	{
-		return (*this > (BigInteger)num);
-	}
 	bool operator>=(const BigInteger& num) const
 	{
 		if (this->_sign == '+' && num._sign == '-') return true;
@@ -305,14 +245,6 @@ public:
 			}
 		}
 		return true;
-	}
-	bool operator>=(const long long num) const
-	{
-		return (*this >= (BigInteger)num);
-	}
-	bool operator>=(const std::string& num) const
-	{
-		return (*this >= (BigInteger)num);
 	}
 	bool operator<(const BigInteger& num) const
 	{
@@ -330,14 +262,6 @@ public:
 		}
 		return false;
 	}
-	bool operator<(const long long num) const
-	{
-		return (*this < (BigInteger)num);
-	}
-	bool operator<(const std::string& num) const
-	{
-		return (*this < (BigInteger)num);
-	}
 	bool operator<=(const BigInteger& num) const
 	{
 		if (this->_sign == '-' && num._sign == '+') return true;
@@ -353,14 +277,6 @@ public:
 		}
 		return true;
 	}
-	bool operator<=(const long long num) const
-	{
-		return (*this <= (BigInteger)num);
-	}
-	bool operator<=(const std::string& num) const
-	{
-		return (*this <= (BigInteger)num);
-	}
 	bool operator==(const BigInteger& num) const
 	{
 		BigInteger copy = num;
@@ -373,14 +289,6 @@ public:
 			}
 			return true;
 		}
-	}
-	bool operator==(const long long num) const
-	{
-		return (*this == (BigInteger)num);
-	}
-	bool operator==(const std::string& num) const
-	{
-		return (*this == (BigInteger)num);
 	}
 	bool operator!=(const BigInteger& num) const
 	{
@@ -395,15 +303,7 @@ public:
 			return false;
 		}
 	}
-	bool operator!=(const long long num) const
-	{
-		return (*this != (BigInteger)num);
-	}
-	bool operator!=(const std::string& num) const
-	{
-		return (*this != (BigInteger)num);
-	}
-	operator long long()
+	explicit operator long long()
 	{
 		int min = (15 < this->Digit() - 1) ? 15 : this->Digit() - 1;
 		long long result = 0;
@@ -414,10 +314,10 @@ public:
 
 	static BigInteger Division(const BigInteger& dividend, const BigInteger& divisor, BigInteger& remainder) //dividend / divisor = quotient...remainder
 	{
-		if (divisor == 0) exit(0);
-		if (dividend == 0 || dividend < divisor) {
+		if (divisor == (long long)0) exit(0);
+		if (dividend == (long long)0 || dividend < divisor) {
 			remainder = dividend;
-			return 0;
+			return (long long)0;
 		}
 		BigInteger quotient, temp;
 		for (int i = 0; i < dividend.Digit(); i++) {
