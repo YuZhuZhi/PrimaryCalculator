@@ -98,15 +98,13 @@ public:
 	}
 	void Print() const
 	{
-		BigInteger temp = *this;
-		if (_sign == '+');
-		else std::cout << _sign;
-		for (std::vector<short>::iterator vsit = temp._number.end() - 1; vsit >= temp._number.begin() + 1; vsit--) std::cout << *vsit;
-		std::cout << *(temp._number.begin());
+		if (_sign == '-') std::cout << '-';
+		for (auto vsit = this->_number.end() - 1; vsit >= this->_number.begin() + 1; vsit--) std::cout << *vsit;
+		std::cout << *(this->_number.begin());
 	}
 	int Digit() const //返回大数的位数
 	{
-		return this->_number.size();
+		return (this->_number.size());
 	}
 	BigInteger Power(const long long power) const //大数的power次幂
 	{
@@ -121,7 +119,7 @@ public:
 			return result;
 		}
 		if (power == 0) return (1); //0次幂
-		if (power < 0) return ((BigInteger)1 / copy).Power(-power); //复数次幂
+		if (power < 0) return ((BigInteger)1 / copy).Power(-power); //负数次幂
 	}
 	BigInteger& operator-() //返回原数的相反数
 	{
@@ -137,7 +135,7 @@ public:
 	}
 	BigInteger operator+(const BigInteger& num) const
 	{
-		BigInteger result = *this, copy = num;
+		BigInteger result(*this), copy(num);
 		if (copy._sign == '-') return operator-(-copy); //如果num是负数，那么相当于减去-num
 		else { //如果num是正数
 			if (result._sign == '+') { //如果this是正数或0
@@ -163,7 +161,7 @@ public:
 	}
 	BigInteger operator-(const BigInteger& num) const
 	{
-		BigInteger result = *this, copy = num;
+		BigInteger result(*this), copy(num);
 		if (copy._sign == '-') return operator+(-copy); //如果num是负数，那么相当于加上-num
 		else { //如果num是正数
 			if (result._sign == '+') { //如果this是正数或0
@@ -185,7 +183,7 @@ public:
 	}
 	BigInteger operator*(const BigInteger& num) const
 	{
-		BigInteger result, copy = *this;
+		BigInteger result;
 		result._number.resize(this->Digit() + num.Digit(), 0); //result位数最多是两数位数之和
 		if (num._sign == this->_sign) result._sign = '+'; //如果两数符号相同result符号为+
 		else result._sign = '-'; //如果两数符号相异result符号为-
@@ -217,16 +215,15 @@ public:
 	}
 	bool operator>(const BigInteger& num) const
 	{
-		BigInteger copy = num;
-		if (this->_sign == '+' && copy._sign == '-') return true;
-		if ((*this).Digit() > copy.Digit()) return true;
-		if ((*this).Digit() < copy.Digit()) return false;
-		if ((*this).Digit() == copy.Digit()) {
+		if (this->_sign == '+' && num._sign == '-') return true;
+		if ((*this).Digit() > num.Digit()) return true;
+		if ((*this).Digit() < num.Digit()) return false;
+		if ((*this).Digit() == num.Digit()) {
 			int end = (*this).Digit() - 1;
 			for (int i = end; i >= 0; i--) {
-				if ((*this)._number[i] > copy._number[i]) return true;
-				if ((*this)._number[i] < copy._number[i]) return false;
-				if ((*this)._number[i] == copy._number[i]) continue;
+				if ((*this)._number[i] > num._number[i]) return true;
+				if ((*this)._number[i] < num._number[i]) return false;
+				if ((*this)._number[i] == num._number[i]) continue;
 			}
 		}
 		return false;
@@ -248,16 +245,15 @@ public:
 	}
 	bool operator<(const BigInteger& num) const
 	{
-		BigInteger copy = num;
-		if (this->_sign == '-' && copy._sign == '+') return true;
-		if ((*this).Digit() < copy.Digit()) return true;
-		if ((*this).Digit() > copy.Digit()) return false;
-		if ((*this).Digit() == copy.Digit()) {
+		if (this->_sign == '-' && num._sign == '+') return true;
+		if ((*this).Digit() < num.Digit()) return true;
+		if ((*this).Digit() > num.Digit()) return false;
+		if ((*this).Digit() == num.Digit()) {
 			int end = (*this).Digit() - 1;
 			for (int i = end; i >= 0; i--) {
-				if ((*this)._number[i] < copy._number[i]) return true;
-				if ((*this)._number[i] > copy._number[i]) return false;
-				if ((*this)._number[i] == copy._number[i]) continue;
+				if ((*this)._number[i] < num._number[i]) return true;
+				if ((*this)._number[i] > num._number[i]) return false;
+				if ((*this)._number[i] == num._number[i]) continue;
 			}
 		}
 		return false;
@@ -279,33 +275,31 @@ public:
 	}
 	bool operator==(const BigInteger& num) const
 	{
-		BigInteger copy = num;
-		if ((*this)._sign != copy._sign || (*this).Digit() != copy.Digit()) return false;
+		if ((*this)._sign != num._sign || (*this).Digit() != num.Digit()) return false;
 		else {
 			int end = (*this).Digit() - 1;
 			for (int i = end; i >= 0; i--) {
-				if ((*this)._number[i] != copy._number[i]) return false;
-				if ((*this)._number[i] == copy._number[i]) continue;
+				if ((*this)._number[i] != num._number[i]) return false;
+				if ((*this)._number[i] == num._number[i]) continue;
 			}
 			return true;
 		}
 	}
 	bool operator!=(const BigInteger& num) const
 	{
-		BigInteger copy = num;
-		if ((*this)._sign != copy._sign || (*this).Digit() != copy.Digit()) return true;
+		if ((*this)._sign != num._sign || (*this).Digit() != num.Digit()) return true;
 		else {
 			int end = (*this).Digit() - 1;
 			for (int i = end; i >= 0; i--) {
-				if ((*this)._number[i] != copy._number[i]) return true;
-				if ((*this)._number[i] == copy._number[i]) continue;
+				if ((*this)._number[i] != num._number[i]) return true;
+				if ((*this)._number[i] == num._number[i]) continue;
 			}
 			return false;
 		}
 	}
-	explicit operator long long()
+	explicit operator long long() const
 	{
-		int min = (15 < this->Digit() - 1) ? 15 : this->Digit() - 1;
+		int min = (19 < this->Digit() - 1) ? 19 : this->Digit() - 1;
 		long long result = 0;
 		for (int i = 0; i <= min; i++) result = result + this->_number[i] * pow(10, i);
 		if (this->_sign == '-') result = -result;
