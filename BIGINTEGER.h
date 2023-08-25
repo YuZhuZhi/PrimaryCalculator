@@ -57,11 +57,11 @@ public:
 		}
 		for (std::string::iterator sit = copy.begin(); sit != copy.end(); sit++) { //复制整数部分
 			if ((char)*sit == '.') break; //如果字符串数字有小数部分直接舍弃
-			short temp = (short)(*sit - '0');
+			int temp = (int)(*sit - '0');
 			_number.push_back(temp);
 		}
 		std::reverse(_number.begin(), _number.end()); //倒序存储
-		std::vector<short>::iterator vsit = _number.end() - 1;
+		auto vsit = _number.end() - 1;
 		while (*vsit == 0 && vsit != _number.begin()) { //去除恶意输入的头0
 			vsit = vsit - 1;
 			_number.erase(vsit + 1);
@@ -89,7 +89,7 @@ public:
 			_number.push_back(temp);
 		}
 		std::reverse(_number.begin(), _number.end());
-		std::vector<short>::iterator vsit = _number.end() - 1;
+		auto vsit = _number.end() - 1;
 		while (*vsit == 0 && vsit != _number.begin()) {
 			vsit = vsit - 1;
 			_number.erase(vsit + 1);
@@ -175,7 +175,7 @@ public:
 						result._number[i] = result._number[i] + 10;
 					}
 				}
-				EraseZero(result); //抹去头0
+				result.EraseZero(); //抹去头0
 				return result;
 			}
 			else return (-((-result) + copy)); //如果this是负数，那么相当于-(-this + -num)
@@ -192,11 +192,11 @@ public:
 		for (int i = 0, redigit = result.Digit(); i < redigit; i++) { //进位
 			BigInteger temp(result._number[i]);
 			for (int j = 0; j < temp.Digit(); j++) {
-				if (j == 0) result._number[i] = temp._number[0];
-				else result._number[i + j] = result._number[i + j] + temp._number[j];
+				if (j != 0) result._number[i + j] = result._number[i + j] + temp._number[j];
+				else result._number[i] = temp._number[0];
 			}
 		}
-		EraseZero(result);
+		result.EraseZero();
 		return result;
 	}
 	BigInteger operator/(const BigInteger& num) const
@@ -316,7 +316,7 @@ public:
 		BigInteger quotient, temp;
 		for (int i = 0; i < dividend.Digit(); i++) {
 			temp._number.insert(temp._number.begin(), dividend._number[dividend.Digit() - 1 - i]);
-			EraseZero(temp);
+			temp.EraseZero();
 			int count = 0;
 			while (temp >= divisor) {
 				temp = temp - divisor;
@@ -325,27 +325,27 @@ public:
 			quotient._number.insert(quotient._number.begin(), count);
 		}
 		remainder = temp;
-		EraseZero(quotient);
+		quotient.EraseZero();
 		return quotient;
 	}
 
 protected:
 	char _sign = '+';
 	std::vector<short> _number;
-	static void AddZero(BigInteger& num) //乘10时相当于直接末位加0
+	void AddZero() //乘10时相当于直接末位加0
 	{
-		num._number.insert(num._number.begin(), 0);
+		this->_number.insert(this->_number.begin(), 0);
 	}
-	static void AddZero(BigInteger& num, int power) //乘10^power时相当于直接末位加power个0
+	void AddZero(int power) //乘10^power时相当于直接末位加power个0
 	{
-		for (int i = 1; i <= power; i++) num._number.insert(num._number.begin(), 0);
+		for (int i = 1; i <= power; i++) this->_number.insert(this->_number.begin(), 0);
 	}
-	static void EraseZero(BigInteger& num) //抹除头0
+	void EraseZero() //抹除头0
 	{
-		std::vector<short>::iterator vsit = num._number.end() - 1;
-		while (*vsit == 0 && vsit != num._number.begin()) {
+		auto vsit = this->_number.end() - 1;
+		while (*vsit == 0 && vsit != this->_number.begin()) {
 			vsit = vsit - 1;
-			num._number.erase(vsit + 1);
+			this->_number.erase(vsit + 1);
 		}
 	}
 

@@ -61,6 +61,11 @@ public:
 		{
 			this->_poly = poly._poly;
 		}
+		Polynomial& operator-()
+		{
+			for (auto vit = this->_poly.begin(); vit != this->_poly.end(); vit++) *vit = -(*vit);
+			return (*this);
+		}
 		Polynomial operator+(const Polynomial& poly) const //两多项式相加
 		{
 			if (this->Highest() >= poly.Highest()) {
